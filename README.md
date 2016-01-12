@@ -4,8 +4,6 @@ filepreview : A file preview generator for node.js
 
 Will generate a file preview (gif, jpg or png) of about 100 different document formats.
 
-If the format is not supported, it will tr
-
 ## Installation
 
 filepreview depends on 'unoconv':
