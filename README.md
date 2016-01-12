@@ -20,8 +20,6 @@ To install use npm:
   $ npm install filepreview
 ```
 
-filepreview needs to run as 'root' (check for "Error: Unable to connect or start own listener. Aborting." fix)
-
 ## Usage
 
 ```
