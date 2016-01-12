@@ -161,6 +161,46 @@ The following list of spreadsheet formats are currently available for exporting 
 -  xlt5     - Microsoft Excel 5.0 Template [.xlt]
 -  xlt95    - Microsoft Excel 95 Template [.xlt]
 
+The following list of open office formats are currently available for exporting to:
+
+- Microsoft Word 6.0/95/97/2000/XP (.doc and .dot)
+- Microsoft Word 2003 XML (.xml)
+- Microsoft Word 2007 XML (.docx, .docm, .dotx, .dotm)
+- Microsoft WinWord 5 (.doc)
+- WordPerfect Document (.wpd)
+- WPS 2000/Office 1.0 (.wps)
+- .rtf, .txt, and .csv
+- StarWriter formats (.sdw, .sgl, .vor)
+- DocBook (.xml)
+- Unified Office Format text (.uot, .uof)
+- Ichitaro 8/9/10/11 (.jtd and .jtt)
+- Hangul WP 97 (.hwp)
+- T602 Document (.602, .txt)
+- AportisDoc (Palm) (.pdb)
+- Pocket Word (.psw)
+- Microsoft Excel 97/2000/XP (.xls, .xlw, and .xlt)
+- Microsoft Excel 4.x–5.0/95 (.xls, .xlw, and .xlt)
+- Microsoft Excel 2003 XML (.xml)
+- Microsoft Excel 2007 XML (.xlsx, .xlsm, .xltx, .xltm)
+- Microsoft Excel 2007 binary (.xlsb)
+- Lotus 1-2-3 (.wk1, .wks, and .123)
+- Data Interchange Format (.dif)
+- Rich Text Format (.rtf)
+- Text CSV (.csv and .txt)
+- StarCalc formats (.sdc and .vor)
+- dBASE (.dbf)
+- SYLK (.slk)
+- Unified Office Format spreadsheet (.uos, .uof)
+- .htm and .html files, including Web page queries
+- Pocket Excel (pxl)
+- Quattro Pro 6.0 (.wb2)
+- Microsoft PowerPoint 97/2000/XP (.ppt, .pps, and .pot)
+- Microsoft PowerPoint 2007 (.pptx, .pptm, .potx, .potm)
+- StarDraw and StarImpress (.sda, .sdd, .sdp, and .vor)
+- Unified Office Format presentation (.uop, .uof)
+- CGM – Computer Graphics Metafile (.cgm)
+- Portable Document Format (.pdf)
+
 ## License
 
 filepreview is released under the new BSD license.
