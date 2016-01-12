@@ -6,9 +6,7 @@
 
 var child_process = require('child_process');
 var crypto = require('crypto');
-var path = require('path')
-
-path.extname('index.html')
+var path = require('path');
 
 module.exports = {
   generate: function(input, output, callback) {
