@@ -7,11 +7,12 @@
 var child_process = require('child_process');
 var crypto = require('crypto');
 var path = require('path');
+var fs = require('fs');
 
 module.exports = {
   generate: function(input, output, callback) {
     // Check for supported output format
-    var ext = path.extname(output).toLowerCase();
+    var ext = path.extname(output).toLowerCase().replace('.','');
 
     if (
       ext != 'gif' &&
@@ -31,10 +32,10 @@ module.exports = {
 
     try {
       child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' ' + input);
-      child_process.execSync('unoconv -f '+ ext +' ' + tempPDF + ' ' + output);
+      child_process.execSync('unoconv -f '+ ext + ' -o ' + output + ' ' + tempPDF);
       fs.unlinkSync(tempPDF);
-
-      return callback(null);
+      
+      return callback();
     } catch (ex) {
       callback(true);
     }
