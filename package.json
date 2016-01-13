@@ -1,6 +1,6 @@
 {
   "name": "filepreview",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A file preview generator for node.js",
   "main": "filepreview.js",
   "scripts": {
@@ -10,6 +10,16 @@
     "type": "git",
     "url": "git+https://github.com/maxlabelle/filepreview.git"
   },
+  "keywords": [
+    "video",
+    "file",
+    "preview",
+    "thumbnail",
+    "image",
+    "graphic",
+    "visual",
+    "document"
+  ],
   "author": "Maxime Labelle <Maxime.Labelle@owasp.org> (https://github.com/maxlabelle/nodejs-filepreview)",
   "license": "BSD-4-Clause",
   "bugs": {
