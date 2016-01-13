@@ -58,7 +58,7 @@ module.exports = {
       var tempPDF = '/tmp/'+ hash + '.pdf';
 
       child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' ' + input);
-      child_process.execSync('unoconv -f '+ extOutput + ' -o ' + output + ' ' + tempPDF);
+      child_process.execSync('convert ' + tempPDF + '[0] ' + output);
       fs.unlinkSync(tempPDF);
 
       return callback();
@@ -113,7 +113,7 @@ module.exports = {
       var tempPDF = '/tmp/'+ hash + '.pdf';
 
       child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' ' + input);
-      child_process.execSync('unoconv -f '+ extOutput + ' -o ' + output + ' ' + tempPDF);
+      child_process.execSync('convert ' + tempPDF + '[0] ' + output);
       fs.unlinkSync(tempPDF);
 
       return true;
