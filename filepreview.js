@@ -96,7 +96,7 @@ module.exports = {
 
     var input_video_format = child_process.execSync("ffprobe " + input + " 2>&1 >/dev/null |grep Stream.*Video | sed -e 's/.*Video: //' -e 's/[, ].*//'").toString().replace('\n', '');
 
-    if (ffmpeg_exts.indexOf(input_video_format) > -1) {
+    if (ffmpeg_exts.indexOf(input_video_format) > -1 && input_video_format) {
       try {
         child_process.execSync('ffmpeg -i ' + input + ' -vf  "thumbnail,scale=640:360" -frames:v 1 ' + output);
         return true;
