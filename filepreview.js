@@ -39,11 +39,11 @@ module.exports = {
       ffmpeg_exts.push(ffmpeg_formats[index].replace(' D  ', '').replace(' DE ', '').replace('  E ', '').replace('    ', '').split(' ')[0]);
     }
 
-    var input_video_format = child_process.execSync("ffprobe " + input + " 2>&1 >/dev/null |grep Stream.*Video | sed -e 's/.*Video: //' -e 's/[, ].*//'").toString().replace('\n', '');
+    var input_video_format = child_process.execSync("ffprobe \"" + input + "\" 2>&1 >/dev/null |grep Stream.*Video | sed -e 's/.*Video: //' -e 's/[, ].*//'").toString().replace('\n', '');
 
     if (ffmpeg_exts.indexOf(input_video_format) > -1 && input_video_format) {
       try {
-        child_process.execSync('ffmpeg -i ' + input + ' -vf  "thumbnail,scale=640:360" -frames:v 1 ' + output);
+        child_process.execSync('ffmpeg -i \"' + input + '\" -vf  "thumbnail,scale=640:360" -frames:v 1 \"' + output + '\"');
         return callback();
       } catch (e) {
         return callback(true);
@@ -57,8 +57,8 @@ module.exports = {
 
       var tempPDF = '/tmp/'+ hash + '.pdf';
 
-      child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' ' + input);
-      child_process.execSync('convert ' + tempPDF + '[0] ' + output);
+      child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' \"' + input + '\"');
+      child_process.execSync('convert ' + tempPDF + '[0] \"' + output + '\"');
       fs.unlinkSync(tempPDF);
 
       return callback();
@@ -94,11 +94,11 @@ module.exports = {
       ffmpeg_exts.push(ffmpeg_formats[index].replace(' D  ', '').replace(' DE ', '').replace('  E ', '').replace('    ', '').split(' ')[0]);
     }
 
-    var input_video_format = child_process.execSync("ffprobe " + input + " 2>&1 >/dev/null |grep Stream.*Video | sed -e 's/.*Video: //' -e 's/[, ].*//'").toString().replace('\n', '');
+    var input_video_format = child_process.execSync("ffprobe \"" + input + "\" 2>&1 >/dev/null |grep Stream.*Video | sed -e 's/.*Video: //' -e 's/[, ].*//'").toString().replace('\n', '');
 
     if (ffmpeg_exts.indexOf(input_video_format) > -1 && input_video_format) {
       try {
-        child_process.execSync('ffmpeg -i ' + input + ' -vf  "thumbnail,scale=640:360" -frames:v 1 ' + output);
+        child_process.execSync('ffmpeg -i \"' + input + '\" -vf  "thumbnail,scale=640:360" -frames:v 1 \"' + output + '\"');
         return true;
       } catch (e) {
         return false;
@@ -112,8 +112,8 @@ module.exports = {
 
       var tempPDF = '/tmp/'+ hash + '.pdf';
 
-      child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' ' + input);
-      child_process.execSync('convert ' + tempPDF + '[0] ' + output);
+      child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' \"' + input + '\"');
+      child_process.execSync('convert ' + tempPDF + '[0] \"' + output + '\"');
       fs.unlinkSync(tempPDF);
 
       return true;
