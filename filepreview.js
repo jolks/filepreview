@@ -95,6 +95,7 @@ module.exports = {
   generateSync: function(input, output) {
     // Check for supported output format
     var extOutput = path.extname(output).toLowerCase().replace('.','');
+    var extInput = path.extname(input).toLowerCase().replace('.','');
 
     if (
       extOutput != 'gif' &&
