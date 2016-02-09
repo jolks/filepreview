@@ -8,6 +8,7 @@ var child_process = require('child_process');
 var crypto = require('crypto');
 var path = require('path');
 var fs = require('fs');
+var mimedb = require('./db.json');
 
 module.exports = {
   generate: function(input, output, callback) {
@@ -23,6 +24,27 @@ module.exports = {
       return callback(true);
     }
 
+    var fileType = 'other';
+
+    root:
+    for ( var index in mimedb ) {
+      if ( 'extensions' in mimedb[index] ) {
+        for ( var indexExt in mimedb[index].extensions ) {
+          if ( mimedb[index].extensions[indexExt] == extInput ) {
+            if ( index.split('/')[0] == 'image' ) {
+              fileType = 'image';
+            } else if ( index.split('/')[0] == 'video' ) {
+              fileType = 'video';
+            } else {
+              fileType = 'other';
+            }
+
+            break root;
+          }
+        }
+      }
+    }
+
     try {
         stats = fs.lstatSync(input);
 
@@ -33,15 +55,7 @@ module.exports = {
         return callback(true);
     }
 
-    var ffmpeg_formats = child_process.execSync('ffmpeg -formats').toString().split('\n');
-    var ffmpeg_exts = [];
-    for ( var index in ffmpeg_formats ) {
-      ffmpeg_exts.push(ffmpeg_formats[index].replace(' D  ', '').replace(' DE ', '').replace('  E ', '').replace('    ', '').split(' ')[0]);
-    }
-
-    var input_video_format = child_process.execSync("ffprobe \"" + input + "\" 2>&1 >/dev/null |grep Stream.*Video | sed -e 's/.*Video: //' -e 's/[, ].*//'").toString().replace('\n', '');
-
-    if (ffmpeg_exts.indexOf(input_video_format) > -1 && input_video_format) {
+    if ( fileType == 'video' ) {
       try {
         child_process.execSync('ffmpeg -i \"' + input + '\" -vf  "thumbnail,scale=640:360" -frames:v 1 \"' + output + '\"');
         return callback();
@@ -50,21 +64,33 @@ module.exports = {
       }
     }
 
-    try {
-      var hash = crypto.createHash('sha512');
-      hash.update(Math.random().toString());
-      hash = hash.digest('hex');
-
-      var tempPDF = '/tmp/'+ hash + '.pdf';
-
-      child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' \"' + input + '\"');
-      child_process.execSync('convert ' + tempPDF + '[0] \"' + output + '\"');
-      fs.unlinkSync(tempPDF);
-
-      return callback();
-    } catch (e) {
-      return callback(true);
+    if ( fileType == 'image' ) {
+      try {
+        child_process.execSync('convert \"' + input + '\" \"' + output + '\"');
+        return callback();
+      } catch (e) {
+        return callback(true);
+      }
     }
+
+    if ( fileType == 'other' ) {
+      try {
+        var hash = crypto.createHash('sha512');
+        hash.update(Math.random().toString());
+        hash = hash.digest('hex');
+
+        var tempPDF = '/tmp/'+ hash + '.pdf';
+
+        child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' \"' + input + '\"');
+        child_process.execSync('convert ' + tempPDF + '[0] \"' + output + '\"');
+        fs.unlinkSync(tempPDF);
+
+        return callback();
+      } catch (e) {
+        return callback(true);
+      }
+    }
+
   },
   generateSync: function(input, output) {
     // Check for supported output format
@@ -78,6 +104,27 @@ module.exports = {
       return false;
     }
 
+    var fileType = 'other';
+
+    root:
+    for ( var index in mimedb ) {
+      if ( 'extensions' in mimedb[index] ) {
+        for ( var indexExt in mimedb[index].extensions ) {
+          if ( mimedb[index].extensions[indexExt] == extInput ) {
+            if ( index.split('/')[0] == 'image' ) {
+              fileType = 'image';
+            } else if ( index.split('/')[0] == 'video' ) {
+              fileType = 'video';
+            } else {
+              fileType = 'other';
+            }
+
+            break root;
+          }
+        }
+      }
+    }
+
     try {
         stats = fs.lstatSync(input);
 
@@ -88,15 +135,7 @@ module.exports = {
         return false;
     }
 
-    var ffmpeg_formats = child_process.execSync('ffmpeg -formats').toString().split('\n');
-    var ffmpeg_exts = [];
-    for ( var index in ffmpeg_formats ) {
-      ffmpeg_exts.push(ffmpeg_formats[index].replace(' D  ', '').replace(' DE ', '').replace('  E ', '').replace('    ', '').split(' ')[0]);
-    }
-
-    var input_video_format = child_process.execSync("ffprobe \"" + input + "\" 2>&1 >/dev/null |grep Stream.*Video | sed -e 's/.*Video: //' -e 's/[, ].*//'").toString().replace('\n', '');
-
-    if (ffmpeg_exts.indexOf(input_video_format) > -1 && input_video_format) {
+    if ( fileType == 'video' ) {
       try {
         child_process.execSync('ffmpeg -i \"' + input + '\" -vf  "thumbnail,scale=640:360" -frames:v 1 \"' + output + '\"');
         return true;
@@ -105,20 +144,31 @@ module.exports = {
       }
     }
 
-    try {
-      var hash = crypto.createHash('sha512');
-      hash.update(Math.random().toString());
-      hash = hash.digest('hex');
+    if ( fileType == 'image' ) {
+      try {
+        child_process.execSync('convert \"' + input + '\" \"' + output + '\"');
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
 
-      var tempPDF = '/tmp/'+ hash + '.pdf';
+    if ( fileType == 'other' ) {
+      try {
+        var hash = crypto.createHash('sha512');
+        hash.update(Math.random().toString());
+        hash = hash.digest('hex');
 
-      child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' \"' + input + '\"');
-      child_process.execSync('convert ' + tempPDF + '[0] \"' + output + '\"');
-      fs.unlinkSync(tempPDF);
+        var tempPDF = '/tmp/'+ hash + '.pdf';
 
-      return true;
-    } catch (e) {
-      return false;
+        child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' \"' + input + '\"');
+        child_process.execSync('convert ' + tempPDF + '[0] \"' + output + '\"');
+        fs.unlinkSync(tempPDF);
+
+        return true;
+      } catch (e) {
+        return false;
+      }
     }
   }
 };

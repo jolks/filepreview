@@ -1,6 +1,6 @@
 {
   "name": "filepreview",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A file preview generator for node.js",
   "main": "filepreview.js",
   "scripts": {
@@ -20,7 +20,7 @@
     "visual",
     "document"
   ],
-  "author": "Maxime Labelle <Maxime.Labelle@owasp.org> (https://github.com/maxlabelle/nodejs-filepreview)",
+  "author": "Maxime Labelle <Maxime.Labelle@owasp.org> (https://github.com/maxlabelle/filepreview)",
   "license": "BSD-4-Clause",
   "bugs": {
     "url": "https://github.com/maxlabelle/filepreview/issues"

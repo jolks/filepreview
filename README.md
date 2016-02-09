@@ -38,6 +38,7 @@ To install use npm:
 Asynchronous with callback :
 
 ```
+
   var filepreview = require('filepreview');
 
   filepreview.generate('/home/myfile.docx', '/home/myfile_preview.gif', function(error) {
@@ -52,6 +53,7 @@ Asynchronous with callback :
 Synchronous (if error, will return false):
 
 ```
+
   var filepreview = require('filepreview');
 
   if (!filepreview.generateSync('/home/myfile.docx', '/home/myfile_preview.gif')) {
