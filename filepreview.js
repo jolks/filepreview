@@ -45,6 +45,10 @@ module.exports = {
       }
     }
 
+    if ( extInput == 'pdf' ) {
+      fileType = 'image';
+    }
+
     try {
         stats = fs.lstatSync(input);
 
@@ -126,6 +130,10 @@ module.exports = {
       }
     }
 
+    if ( extInput == 'pdf' ) {
+      fileType = 'image';
+    }
+    
     try {
         stats = fs.lstatSync(input);
 
