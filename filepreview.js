@@ -70,7 +70,7 @@ module.exports = {
 
     if ( fileType == 'image' ) {
       try {
-        child_process.execSync('convert \"' + input + '\" \"' + output + '\"');
+        child_process.execSync('convert \"' + input + '\"[0] \"' + output + '\"');
         return callback();
       } catch (e) {
         return callback(true);
@@ -133,7 +133,7 @@ module.exports = {
     if ( extInput == 'pdf' ) {
       fileType = 'image';
     }
-    
+
     try {
         stats = fs.lstatSync(input);
 
