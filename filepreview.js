@@ -155,7 +155,7 @@ module.exports = {
 
     if ( fileType == 'image' ) {
       try {
-        child_process.execSync('convert \"' + input + '\" \"' + output + '\"');
+        child_process.execSync('convert \"' + input + '\"[0] \"' + output + '\"');
         return true;
       } catch (e) {
         return false;
