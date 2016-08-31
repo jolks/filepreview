@@ -96,7 +96,7 @@ module.exports = {
     }
 
   },
-  generateSync: function(input, output) {
+  generateSync: function(input, output, options) {
     // Check for supported output format
     var extOutput = path.extname(output).toLowerCase().replace('.','');
     var extInput = path.extname(input).toLowerCase().replace('.','');
@@ -146,7 +146,7 @@ module.exports = {
 
     if ( fileType == 'video' ) {
       try {
-        child_process.execSync('ffmpeg -i \"' + input + '\" -vf  "thumbnail,scale=640:360" -frames:v 1 \"' + output + '\"');
+        child_process.execSync('ffmpeg -i \"' + input + '\" -vf  "thumbnail,scale=640:360" -frames:v 1 \"' + output + '\"', options);
         return true;
       } catch (e) {
         return false;
@@ -155,7 +155,7 @@ module.exports = {
 
     if ( fileType == 'image' ) {
       try {
-        child_process.execSync('convert \"' + input + '\"[0] \"' + output + '\"');
+        child_process.execSync('convert \"' + input + '\"[0] \"' + output + '\"', options);
         return true;
       } catch (e) {
         return false;
@@ -170,8 +170,8 @@ module.exports = {
 
         var tempPDF = '/tmp/'+ hash + '.pdf';
 
-        child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' \"' + input + '\"');
-        child_process.execSync('convert ' + tempPDF + '[0] \"' + output + '\"');
+        child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' \"' + input + '\"', options);
+        child_process.execSync('convert ' + tempPDF + '[0] \"' + output + '\"', options);
         fs.unlinkSync(tempPDF);
 
         return true;
