@@ -146,7 +146,7 @@ module.exports = {
 
     if ( fileType == 'video' ) {
       try {
-        child_process.execSync('ffmpeg -i \"' + input + '\" -vf  "thumbnail,scale=640:360" -frames:v 1 \"' + output + '\"', options);
+        child_process.execSync('ffmpeg -y -i \"' + input + '\" -vf  "thumbnail,scale=640:360" -frames:v 1 \"' + output + '\"', options);
         return true;
       } catch (e) {
         return false;
