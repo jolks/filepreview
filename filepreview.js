@@ -49,52 +49,45 @@ module.exports = {
       fileType = 'image';
     }
 
-    try {
-        stats = fs.lstatSync(input);
-
-        if (!stats.isFile()) {
-          return callback(true);
+    fs.lstat(input, function(error, stats) {
+      if (error) return callback(error);
+      if (!stats.isFile()) {
+        return callback(true);
+      } else {
+        if ( fileType == 'video' ) {
+          child_process.execFile('ffmpeg', ['-y', '-i', input, '-vf', 'thumbnail,scale=640:360', '-frames:v', '1', output], function(error) {
+            if (error) return callback(error);
+            return callback();
+          });
         }
-    } catch (e) {
-        return callback(true);
-    }
 
-    if ( fileType == 'video' ) {
-      try {
-        child_process.execSync('ffmpeg -i \"' + input + '\" -vf  "thumbnail,scale=640:360" -frames:v 1 \"' + output + '\"');
-        return callback();
-      } catch (e) {
-        return callback(true);
+        if ( fileType == 'image' ) {
+          child_process.execFile('convert', [input + '[0]', output], function(error) {
+            if (error) return callback(error);
+            return callback();
+          });
+        }
+
+        if ( fileType == 'other' ) {
+          var hash = crypto.createHash('sha512');
+          hash.update(Math.random().toString());
+          hash = hash.digest('hex');
+
+          var tempPDF = '/tmp/'+ hash + '.pdf';
+
+          child_process.execFile('unoconv', ['-e', 'PageRange=1', '-o', tempPDF, input], function(error) {
+            if (error) return callback(error);
+            child_process.execFile('convert', [tempPDF + '[0]', output], function(error) {
+              if (error) return callback(error);
+              fs.unlink(tempPDF, function(error) {
+                if (error) return callback(error);
+                return callback();
+              });
+            });
+          });
+        }
       }
-    }
-
-    if ( fileType == 'image' ) {
-      try {
-        child_process.execSync('convert \"' + input + '\"[0] \"' + output + '\"');
-        return callback();
-      } catch (e) {
-        return callback(true);
-      }
-    }
-
-    if ( fileType == 'other' ) {
-      try {
-        var hash = crypto.createHash('sha512');
-        hash.update(Math.random().toString());
-        hash = hash.digest('hex');
-
-        var tempPDF = '/tmp/'+ hash + '.pdf';
-
-        child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' \"' + input + '\"');
-        child_process.execSync('convert ' + tempPDF + '[0] \"' + output + '\"');
-        fs.unlinkSync(tempPDF);
-
-        return callback();
-      } catch (e) {
-        return callback(true);
-      }
-    }
-
+    });
   },
   generateSync: function(input, output) {
     // Check for supported output format
@@ -146,7 +139,7 @@ module.exports = {
 
     if ( fileType == 'video' ) {
       try {
-        child_process.execSync('ffmpeg -i \"' + input + '\" -vf  "thumbnail,scale=640:360" -frames:v 1 \"' + output + '\"');
+        child_process.execSync('ffmpeg -y -i \"' + input + '\" -vf  "thumbnail,scale=640:360" -frames:v 1 \"' + output + '\"');
         return true;
       } catch (e) {
         return false;
