@@ -35,7 +35,7 @@ To install use npm:
 
 ## Usage
 
-Asynchronous with callback :
+Asynchronous with callback (if error, will return error in the callback) :
 
 ```
 
@@ -43,7 +43,7 @@ Asynchronous with callback :
 
   filepreview.generate('/home/myfile.docx', '/home/myfile_preview.gif', function(error) {
     if (error) {
-      return console.log('Oops, something went wrong.');
+      return console.log(error);
     }
     console.log('File preview is /home/myfile_preview.gif');
   });
@@ -62,6 +62,12 @@ Synchronous (if error, will return false):
     console.log('File preview is /home/myfile_preview.gif');
   };
 
+```
+
+To be more stable, you can run `unoconv` as [listener](https://github.com/dagwieers/unoconv#start-your-own-unoconv-listener) before running the file preview generation.
+```
+$ unoconv --listener
+$ node script_with_file_preview_generations.js
 ```
 
 ## Document formats
