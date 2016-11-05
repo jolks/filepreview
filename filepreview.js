@@ -11,7 +11,12 @@ var fs = require('fs');
 var mimedb = require('./db.json');
 
 module.exports = {
-  generate: function(input, output, callback) {
+  generate: function(input, output, options = {}, callback) {
+    // Normalize arguments
+    if (typeof options === 'function') {
+      callback = options;
+      options = {};
+    }
     // Check for supported output format
     var extOutput = path.extname(output).toLowerCase().replace('.','');
     var extInput = path.extname(input).toLowerCase().replace('.','');
@@ -55,14 +60,22 @@ module.exports = {
         return callback(true);
       } else {
         if ( fileType == 'video' ) {
-          child_process.execFile('ffmpeg', ['-y', '-i', input, '-vf', 'thumbnail,scale=640:360', '-frames:v', '1', output], function(error) {
+          var ffmpegArgs = ['-y', '-i', input, '-vf', 'thumbnail', '-frames:v', '1', output];
+          if (options.width > 0 && options.height > 0) {
+            ffmpegArgs.splice(4, 1, 'thumbnail,scale=' + options.width + ':' + options.height);
+          }
+          child_process.execFile('ffmpeg', ffmpegArgs, function(error) {
             if (error) return callback(error);
             return callback();
           });
         }
 
         if ( fileType == 'image' ) {
-          child_process.execFile('convert', [input + '[0]', output], function(error) {
+          var convertArgs = [input + '[0]', output];
+          if (options.width > 0 && options.height > 0) {
+            convertArgs.splice(0, 0, '-resize', options.width + 'x' + options.height);
+          }
+          child_process.execFile('convert', convertArgs, function(error) {
             if (error) return callback(error);
             return callback();
           });
@@ -77,7 +90,11 @@ module.exports = {
 
           child_process.execFile('unoconv', ['-e', 'PageRange=1', '-o', tempPDF, input], function(error) {
             if (error) return callback(error);
-            child_process.execFile('convert', [tempPDF + '[0]', output], function(error) {
+            var convertOtherArgs = [tempPDF + '[0]', output];
+            if (options.width > 0 && options.height > 0) {
+              convertOtherArgs.splice(0, 0, '-resize', options.width + 'x' + options.height);
+            }
+            child_process.execFile('convert', convertOtherArgs, function(error) {
               if (error) return callback(error);
               fs.unlink(tempPDF, function(error) {
                 if (error) return callback(error);
@@ -89,7 +106,7 @@ module.exports = {
       }
     });
   },
-  generateSync: function(input, output) {
+  generateSync: function(input, output, options = {}) {
     // Check for supported output format
     var extOutput = path.extname(output).toLowerCase().replace('.','');
     var extInput = path.extname(input).toLowerCase().replace('.','');
@@ -139,7 +156,11 @@ module.exports = {
 
     if ( fileType == 'video' ) {
       try {
-        child_process.execSync('ffmpeg -y -i \"' + input + '\" -vf  "thumbnail,scale=640:360" -frames:v 1 \"' + output + '\"');
+        var ffmpegArgs = ['-y', '-i', input, '-vf', 'thumbnail', '-frames:v', '1', output];
+        if (options.width > 0 && options.height > 0) {
+          ffmpegArgs.splice(4, 1, 'thumbnail,scale=' + options.width + ':' + options.height)
+        }
+        child_process.execFileSync('ffmpeg', ffmpegArgs);
         return true;
       } catch (e) {
         return false;
@@ -148,7 +169,11 @@ module.exports = {
 
     if ( fileType == 'image' ) {
       try {
-        child_process.execSync('convert \"' + input + '\"[0] \"' + output + '\"');
+        var convertArgs = [input + '[0]', output];
+        if (options.width > 0 && options.height > 0) {
+          convertArgs.splice(0, 0, '-resize', options.width + 'x' + options.height);
+        }
+        child_process.execFileSync('convert', convertArgs);
         return true;
       } catch (e) {
         return false;
@@ -163,8 +188,13 @@ module.exports = {
 
         var tempPDF = '/tmp/'+ hash + '.pdf';
 
-        child_process.execSync('unoconv -e PageRange=1 -o ' + tempPDF + ' \"' + input + '\"');
-        child_process.execSync('convert ' + tempPDF + '[0] \"' + output + '\"');
+        child_process.execFileSync('unoconv', ['-e', 'PageRange=1', '-o', tempPDF, input]);
+
+        var convertOtherArgs = [tempPDF + '[0]', output];
+        if (options.width > 0 && options.height > 0) {
+          convertOtherArgs.splice(0, 0, '-resize', options.width + 'x' + options.height);
+        }
+        child_process.execFileSync('convert', convertOtherArgs);
         fs.unlinkSync(tempPDF);
 
         return true;

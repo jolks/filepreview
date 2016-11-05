@@ -37,8 +37,7 @@ To install use npm:
 
 Asynchronous with callback (if error, will return error in the callback) :
 
-```
-
+```javascript
   var filepreview = require('filepreview');
 
   filepreview.generate('/home/myfile.docx', '/home/myfile_preview.gif', function(error) {
@@ -52,8 +51,7 @@ Asynchronous with callback (if error, will return error in the callback) :
 
 Synchronous (if error, will return false):
 
-```
-
+```javascript
   var filepreview = require('filepreview');
 
   if (!filepreview.generateSync('/home/myfile.docx', '/home/myfile_preview.gif')) {
@@ -62,6 +60,24 @@ Synchronous (if error, will return false):
     console.log('File preview is /home/myfile_preview.gif');
   };
 
+```
+
+You can set options object for the preview generation. List of options available:-
+* width
+* height
+
+e.g.
+```javascript
+var options = {
+  width: 640,
+  height: 480
+};
+
+// Asynchronous
+filepreview.generate('/home/myfile.docx', '/home/myfile_preview.gif', options, function(error) {...});
+
+// Synchronous
+filepreview.generateSync('/home/myfile.docx', '/home/myfile_preview.gif', options);
 ```
 
 To be more stable, you can run `unoconv` as [listener](https://github.com/dagwieers/unoconv#start-your-own-unoconv-listener) before running the file preview generation.
