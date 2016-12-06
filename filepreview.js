@@ -11,12 +11,16 @@ var fs = require('fs');
 var mimedb = require('./db.json');
 
 module.exports = {
-  generate: function(input, output, options = {}, callback) {
+  generate: function(input, output, options, callback) {
     // Normalize arguments
+
     if (typeof options === 'function') {
       callback = options;
       options = {};
+    } else {
+      options = options || {};
     }
+
     // Check for supported output format
     var extOutput = path.extname(output).toLowerCase().replace('.','');
     var extInput = path.extname(input).toLowerCase().replace('.','');
@@ -106,7 +110,10 @@ module.exports = {
       }
     });
   },
-  generateSync: function(input, output, options = {}) {
+  generateSync: function(input, output, options) {
+
+    options = options || {};
+    
     // Check for supported output format
     var extOutput = path.extname(output).toLowerCase().replace('.','');
     var extInput = path.extname(input).toLowerCase().replace('.','');
