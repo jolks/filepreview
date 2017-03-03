@@ -8,7 +8,9 @@ var child_process = require('child_process');
 var crypto = require('crypto');
 var path = require('path');
 var fs = require('fs');
+var os = require('os');
 var mimedb = require('./db.json');
+var http = require('http');
 
 module.exports = {
   generate: function(input, output, options, callback) {
@@ -58,6 +60,21 @@ module.exports = {
       fileType = 'image';
     }
 
+    if (input.indexOf("http://") == 0 || input.indexOf("https://") == 0) {
+      var url = input.split("/");
+      var url_filename = url[url.length - 1];
+      var hash = crypto.createHash('sha512');
+      hash.update(Math.random().toString());
+      hash = hash.digest('hex');
+      var temp_input = path.join(os.tmpdir(), hash + url_filename);
+      var file = fs.createWriteStream(temp_input);
+      sync(http, 'get');
+      var request = http.get(input);
+      console.log(request);
+      file = request.data;
+      input = temp_input;
+    }
+
     fs.lstat(input, function(error, stats) {
       if (error) return callback(error);
       if (!stats.isFile()) {
@@ -90,7 +107,7 @@ module.exports = {
           hash.update(Math.random().toString());
           hash = hash.digest('hex');
 
-          var tempPDF = '/tmp/'+ hash + '.pdf';
+          var tempPDF = path.join(os.tmpdir(), hash + '.pdf');
 
           child_process.execFile('unoconv', ['-e', 'PageRange=1', '-o', tempPDF, input], function(error) {
             if (error) return callback(error);
@@ -113,7 +130,7 @@ module.exports = {
   generateSync: function(input, output, options) {
 
     options = options || {};
-    
+
     // Check for supported output format
     var extOutput = path.extname(output).toLowerCase().replace('.','');
     var extInput = path.extname(input).toLowerCase().replace('.','');
@@ -193,7 +210,7 @@ module.exports = {
         hash.update(Math.random().toString());
         hash = hash.digest('hex');
 
-        var tempPDF = '/tmp/'+ hash + '.pdf';
+        var tempPDF = path.join(os.tmpdir(), hash + '.pdf');
 
         child_process.execFileSync('unoconv', ['-e', 'PageRange=1', '-o', tempPDF, input]);
 
