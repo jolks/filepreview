@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/maxlabelle/filepreview#readme",
   "dependencies": {
+    "download-file": "^0.1.5",
     "synchronize": "^2.0.0"
   }
 }

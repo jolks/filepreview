@@ -10,7 +10,7 @@ var path = require('path');
 var fs = require('fs');
 var os = require('os');
 var mimedb = require('./db.json');
-var http = require('http');
+var download = require('download-file')
 
 module.exports = {
   generate: function(input, output, options, callback) {
@@ -59,7 +59,7 @@ module.exports = {
     if ( extInput == 'pdf' ) {
       fileType = 'image';
     }
-
+    /*
     if (input.indexOf("http://") == 0 || input.indexOf("https://") == 0) {
       var url = input.split("/");
       var url_filename = url[url.length - 1];
@@ -74,6 +74,7 @@ module.exports = {
       file = request.data;
       input = temp_input;
     }
+    */
 
     fs.lstat(input, function(error, stats) {
       if (error) return callback(error);
