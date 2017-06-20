@@ -69,7 +69,7 @@ Synchronous (if error, will return false):
 
 ```
 
-You can specify a url instead of a file path, ie: http://www.myfile.com/my_file.doc, and filepreview will download it and generate a its preview.
+You can specify a url instead of a file path, ie: http://www.myfile.com/my_file.doc, and filepreview will download it to generate its preview.
 
 You can set options object for the preview generation. List of options available:-
 * width
