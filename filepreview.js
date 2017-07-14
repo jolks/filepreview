@@ -100,7 +100,7 @@ module.exports = {
             convertArgs.splice(0, 0, '-resize', options.width + 'x' + options.height);
           }
           if (options.quality) {
-            convertOtherArgs.splice(0, 0, '-quality', options.quality);
+            convertArgs.splice(0, 0, '-quality', options.quality);
           }
           child_process.execFile('convert', convertArgs, function(error) {
             if (input_original.indexOf("http://") == 0 || input_original.indexOf("https://") == 0) {
@@ -231,7 +231,7 @@ module.exports = {
           convertArgs.splice(0, 0, '-resize', options.width + 'x' + options.height);
         }
         if (options.quality) {
-          convertOtherArgs.splice(0, 0, '-quality', options.quality);
+          convertArgs.splice(0, 0, '-quality', options.quality);
         }
         child_process.execFileSync('convert', convertArgs);
         if (input_original.indexOf("http://") == 0 || input_original.indexOf("https://") == 0) {

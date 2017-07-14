@@ -1,6 +1,6 @@
 {
   "name": "filepreview",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "A file preview generator for node.js",
   "main": "filepreview.js",
   "scripts": {
