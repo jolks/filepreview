@@ -75,13 +75,23 @@ You can set options object for the preview generation. List of options available
 * width
 * height
 * quality [see quality documentation](https://www.imagemagick.org/script/command-line-options.php#quality)
+* previewTime
 
-e.g.
+e.g. Document/Image
 ```javascript
 var options = {
   width: 640,
   height: 480,
   quality: 90
+};
+
+e.g. Video
+```javascript
+var options = {
+  width: 640,
+  height: 480,
+  quality: 90,
+  previewTime: '00:03:00.000'
 };
 
 // Asynchronous

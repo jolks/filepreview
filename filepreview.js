@@ -80,10 +80,16 @@ module.exports = {
         return callback(true);
       } else {
         if ( fileType == 'video' ) {
-          var ffmpegArgs = ['-y', '-i', input, '-vf', 'thumbnail', '-frames:v', '1', output];
+          var ffmpegArgs = ['-y', '-i', input, '-vf', 'thumbnail', '-frames:v', '1'];
           if (options.width > 0 && options.height > 0) {
             ffmpegArgs.splice(4, 1, 'thumbnail,scale=' + options.width + ':' + options.height);
           }
+          if (options.hasOwnProperty('previewTime')) {
+            ffmpegArgs.push("-ss");
+            ffmpegArgs.push(options.previewTime)
+          }
+          ffmpegArgs.push(output);
+
           child_process.execFile('ffmpeg', ffmpegArgs, function(error) {
             if (input_original.indexOf("http://") == 0 || input_original.indexOf("https://") == 0) {
               fs.unlinkSync(input);
