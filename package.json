@@ -1,6 +1,6 @@
 {
   "name": "filepreview",
-  "version": "1.0.12",
+  "version": "1.0.14",
   "description": "A file preview generator for node.js",
   "main": "filepreview.js",
   "scripts": {
@@ -25,5 +25,9 @@
   "bugs": {
     "url": "https://github.com/maxlabelle/filepreview/issues"
   },
-  "homepage": "https://github.com/maxlabelle/filepreview#readme"
+  "homepage": "https://github.com/maxlabelle/filepreview#readme",
+  "dependencies": {
+    "download-file": "^0.1.5",
+    "synchronize": "^2.0.0"
+  }
 }

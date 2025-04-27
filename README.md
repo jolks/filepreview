@@ -27,6 +27,13 @@ filepreview depends on 'ImageMagick':
   $ apt-get install imagemagick
 ```
 
+
+filepreview depends on 'curl':
+
+```
+  $ apt-get install curl
+```
+
 To install use npm:
 
 ```
@@ -62,15 +69,29 @@ Synchronous (if error, will return false):
 
 ```
 
+You can specify a url instead of a file path, ie: http://www.myfile.com/my_file.doc, and filepreview will download it to generate its preview.
+
 You can set options object for the preview generation. List of options available:-
 * width
 * height
+* quality [see quality documentation](https://www.imagemagick.org/script/command-line-options.php#quality)
+* previewTime
 
-e.g.
+e.g. Document/Image
 ```javascript
 var options = {
   width: 640,
-  height: 480
+  height: 480,
+  quality: 90
+};
+
+e.g. Video
+```javascript
+var options = {
+  width: 640,
+  height: 480,
+  quality: 90,
+  previewTime: '00:03:00.000'
 };
 
 // Asynchronous
